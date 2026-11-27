@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小聊 · AI 助手</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <div class="brand">
+        <span class="brand-icon">✦</span>
+        <span class="brand-name">小聊</span>
+      </div>
+      <button class="icon-btn collapse-btn" id="collapseBtn" title="收起侧边栏">☰</button>
+    </div>
+
+    <button class="new-chat-btn" id="newChatBtn">
+      <span class="plus">＋</span> 新建对话
+    </button>
+
+    <div class="chat-list" id="chatList"></div>
+
+    <div class="sidebar-bottom">
+      <button class="side-link" id="settingsBtn"><span>⚙</span> 设置 / API</button>
+      <div class="side-note">所有数据仅保存在本机浏览器</div>
+    </div>
+  </aside>
+
+  <div class="sidebar-mask" id="sidebarMask"></div>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="icon-btn menu-btn" id="menuBtn" title="展开侧边栏">☰</button>
+      <div class="topbar-title" id="chatTitle">新的对话</div>
+      <div class="topbar-right">
+        <span class="model-badge" id="modelBadge">未配置模型</span>
+        <button class="icon-btn" id="themeBtn" title="切换主题">☾</button>
+      </div>
+    </header>
+
+    <div class="messages" id="messages">
+      <div class="welcome" id="welcome">
+        <div class="welcome-icon">✦</div>
+        <h1>你好，我是小聊</h1>
+        <p>一个简洁的 AI 聊天助手。先在「设置 / API」里填上接口信息，就可以开始对话了。</p>
+        <div class="welcome-tips">
+          <button class="tip-card" data-tip="用简单的语言解释一下什么是大语言模型">💡 解释一个概念</button>
+          <button class="tip-card" data-tip="帮我写一段自我介绍，风格轻松幽默">✍️ 帮我写段文字</button>
+          <button class="tip-card" data-tip="请列出学习 Python 的五个步骤">📋 列个学习计划</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="composer-wrap">
+      <div class="composer">
+        <textarea id="userInput" rows="1" placeholder="输入消息… （Enter 发送，Shift + Enter 换行）"></textarea>
+        <div class="composer-actions">
+          <button class="icon-btn attach-btn" id="stopBtn" title="停止生成" style="display:none">■</button>
+          <button class="send-btn" id="sendBtn" title="发送">➤</button>
+        </div>
+      </div>
+      <div class="composer-hint">内容由你配置的 AI 模型生成，请自行核对重要信息。</div>
+    </div>
+  </main>
+</div>
+
+<div class="modal-mask" id="settingsModal" style="display:none">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>⚙ 设置 · API 配置</h2>
+      <button class="icon-btn" id="closeSettingsBtn" title="关闭">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="notice">
+        <strong>API Key 粘贴在下面第二个输入框「API Key」里。</strong><br>
+        支持任何 OpenAI 兼容接口（OpenAI / DeepSeek / Moonshot / 通义 / 本地 Ollama 等）。
+        信息只保存在你自己的浏览器 localStorage 中，请求经本机代理转发，不会上传到别处。<br>
+        <strong style="color:#d9534f">⚠ 必须通过 <code>node server.js</code> 启动、访问 http://localhost:3000 使用；直接双击 HTML 会因浏览器跨域限制而失败。</strong>
+      </div>
+
+      <label class="field">
+        <span class="field-label">接口地址（Base URL）</span>
+        <input type="text" id="cfgBaseUrl" placeholder="https://api.openai.com/v1" spellcheck="false">
+        <span class="field-help">结尾不要带 /chat/completions，只填到 /v1 即可。</span>
+      </label>
+
+      <label class="field">
+        <span class="field-label">API Key <em>← 粘贴在这里</em></span>
+        <div class="pw-row">
+          <input type="password" id="cfgApiKey" placeholder="sk-..." spellcheck="false" autocomplete="off">
+          <button class="mini-btn" id="toggleKeyBtn">显示</button>
+        </div>
+      </label>
+
+      <label class="field">
+        <span class="field-label">模型名称</span>
+        <input type="text" id="cfgModel" placeholder="gpt-4o-mini" spellcheck="false">
+      </label>
+
+      <label class="field">
+        <span class="field-label">系统提示词（可选）</span>
+        <textarea id="cfgSystem" rows="3" placeholder="例如：你是一个简洁友好的助手，用中文回答。">你是一个友好、简洁、有帮助的 AI 助手，使用中文回答。</textarea>
+      </label>
+
+      <div class="two-col">
+        <label class="field">
+          <span class="field-label">温度（创意度）</span>
+          <input type="number" id="cfgTemperature" min="0" max="2" step="0.1" value="1">
+          <span class="field-help">Kimi 推理模型（kimi-k2.6 / k3 等）固定为 1，填其他值会被自动修正。</span>
+        </label>
+        <label class="field">
+          <span class="field-label">最大回复 Token</span>
+          <input type="number" id="cfgMaxTokens" min="1" step="1" value="2048">
+        </label>
+      </div>
+
+      <div class="preset-row">
+        <span class="field-label">快速预设：</span>
+        <button class="preset-btn" data-preset="openai">OpenAI</button>
+        <button class="preset-btn" data-preset="deepseek">DeepSeek</button>
+        <button class="preset-btn" data-preset="moonshot">Moonshot</button>
+        <button class="preset-btn" data-preset="ollama">本地 Ollama</button>
+      </div>
+
+      <div class="test-line">
+        <button class="test-btn" id="testBtn">测试连接</button>
+        <span id="testResult" class="test-result"></span>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="cancel-btn" id="cancelSettingsBtn">取消</button>
+      <button class="save-btn" id="saveSettingsBtn">保存设置</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
