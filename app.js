@@ -30,7 +30,10 @@
   var state = loadState();
   var generating = false;
   var abortController = null;
-  var proxyAvailable = false;   // 启动时探测：本地 node server.js 在跑则为 true
+  // 只有明确的本地运行环境（localhost/127.0.0.1）才尝试代理；
+  // 线上静态托管（包括套了 CDN 反代的域名）一律走浏览器直连，避免相对路径被 CDN 劫持成 405/502。
+  var isLocal = /^(localhost|127\.0\.0\.1)$/i.test(location.hostname);
+  var proxyAvailable = false;
 
   var $ = function (id) { return document.getElementById(id); };
   var els = {
@@ -258,9 +261,9 @@
 
   function usingProxy() { return proxyAvailable; }
 
-  // 探测本地代理是否可用（静态托管上该请求会失败/返回 405，自动走浏览器直连）
+  // 探测本地代理是否可用：仅 localhost 环境下尝试，线上静态托管一律直连
   async function detectProxy() {
-    if (location.protocol !== 'http:' && location.protocol !== 'https:') { proxyAvailable = false; return; }
+    if (!isLocal) { proxyAvailable = false; return; }
     try {
       var res = await fetch('api/ping', { method: 'GET', cache: 'no-store' });
       if (res.ok) {
@@ -379,8 +382,16 @@
         if (!assistantMsg.content) assistantMsg.content = '（已停止生成）';
         if (reasoning) assistantMsg.reasoning = reasoning;
       } else {
-        assistantMsg.content = '**⚠ 请求失败**\n\n' + escapeHtml(err.message) +
-          '\n\n请检查：API Key、接口地址、模型名称，以及当前网络/浏览器是否允许跨域请求。';
+        var extra = '';
+        if (err.message === 'Failed to fetch') {
+          if (location.protocol === 'http:' && !isLocal) {
+            extra = '\n\n🔑 最可能原因：你用 http 打开，浏览器拦截了到 AI 接口的安全请求。请改用 https 访问本网站。';
+          } else {
+            extra = '\n\n🔑 最可能原因：当前接口不允许浏览器跨域，或网络不通。可尝试本地运行 node server.js 走代理模式。';
+          }
+        }
+        assistantMsg.content = '**⚠ 请求失败**\n\n' + escapeHtml(err.message) + extra +
+          '\n\n其他检查项：API Key、接口地址、模型名称是否正确。';
       }
       renderMessages();
     } finally {
@@ -575,6 +586,17 @@
   renderAll();
   if (window.innerWidth <= 760) closeSidebar();
   autoResize();
+
+  // http 线上页面请求 https API 会被浏览器当作混合内容拦截 → 引导改用 https
+  if (location.protocol === 'http:' && !isLocal) {
+    var httpsUrl = 'https://' + location.host + location.pathname;
+    var sslTip = document.createElement('div');
+    sslTip.style.cssText = 'max-width:820px;margin:0 auto 16px;padding:12px 16px;border-radius:10px;background:#fff3cd;color:#7a5b00;border:1px solid #ffd97d;font-size:13px;text-align:center;';
+    sslTip.innerHTML = '⚠ 你正在用 <b>http</b> 访问，浏览器会拦截向 AI 接口的安全请求。请改用 <b>https</b>：' +
+      '<a href="' + httpsUrl + '" style="color:#8a6d00;font-weight:700;text-decoration:underline">' + httpsUrl + '</a>';
+    els.messages.insertBefore(sslTip, els.messages.firstChild);
+  }
+
   // 探测本地代理：有则用代理，无（静态托管）则浏览器直连 API
   detectProxy().then(function () {
     renderHeader();
