@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>腌鱼 · 音乐搭子</title>
-<link rel="stylesheet" href="style.css?v=2.0">
+<link rel="stylesheet" href="style.css?v=2.1">
 </head>
 <body>
 <div class="app">
@@ -25,7 +25,7 @@
 
     <div class="sidebar-bottom">
       <button class="side-link" id="settingsBtn"><span>⚙</span> 设置 / API</button>
-      <div class="side-note">所有数据仅保存在本机浏览器 · <span class="version-tag">v2.0</span></div>
+      <div class="side-note">所有数据仅保存在本机浏览器 · <span class="version-tag">v2.1</span></div>
     </div>
   </aside>
 
@@ -34,7 +34,14 @@
   <main class="main">
     <header class="topbar">
       <button class="icon-btn menu-btn" id="menuBtn" title="展开侧边栏">☰</button>
-      <div class="topbar-title" id="chatTitle">新的对话</div>
+      <div class="topbar-title-wrap">
+        <div class="topbar-title" id="chatTitle">新的对话</div>
+        <div class="topbar-decor" aria-hidden="true">
+          <img src="assets/pixel-decor/picklejar.png" alt="">
+          <img src="assets/pixel-decor/crystal.png" alt="">
+          <img src="assets/pixel-decor/mushroom.png" alt="">
+        </div>
+      </div>
       <div class="topbar-right">
         <span class="model-badge" id="modelBadge">未配置模型</span>
         <button class="icon-btn" id="themeBtn" title="切换主题">☾</button>
@@ -44,13 +51,6 @@
     <div class="messages" id="messages">
       <div class="welcome" id="welcome">
         <div class="vinyl-deco"><div class="vinyl-disc"><div class="vinyl-label"></div></div></div>
-        <!-- 像素装饰点缀 -->
-        <img class="pixel-deco pd-picklejar" src="assets/pixel-decor/picklejar.png" alt="">
-        <img class="pixel-deco pd-crystal" src="assets/pixel-decor/crystal.png" alt="">
-        <img class="pixel-deco pd-mushroom" src="assets/pixel-decor/mushroom.png" alt="">
-        <img class="pixel-deco pd-spring" src="assets/pixel-decor/spring.png" alt="">
-        <img class="pixel-deco pd-barrel" src="assets/pixel-decor/barrel.png" alt="">
-        <img class="pixel-deco pd-tree" src="assets/pixel-decor/tree.png" alt="">
         <div class="welcome-icon"></div>
         <div class="welcome-kicker">✦ Your Music Bestie ✦</div>
         <h1>嗨，我是 <em>腌鱼</em></h1>
@@ -194,8 +194,8 @@
 </div>
 <button class="mp-fab" id="mpFab" title="展开播放器">🎵</button>
 
-<script src="persona.js?v=2.0"></script>
-<script src="app.js?v=2.0"></script>
-<script src="player.js?v=2.0"></script>
+<script src="persona.js?v=2.1"></script>
+<script src="app.js?v=2.1"></script>
+<script src="player.js?v=2.1"></script>
 </body>
 </html>
