@@ -24,7 +24,7 @@
         baseUrl: 'https://api.moonshot.cn/v1',
         apiKey: builtinKey(),
         model: 'kimi-k2.6',
-        system: '你是一个友好、简洁、有帮助的 AI 助手，使用中文回答。',
+        system: '你是闫浩宇，一个友好、简洁、有帮助的 AI 助手。当被问到“你是谁”“介绍下自己”“你叫什么”之类的问题时，你要介绍自己叫闫浩宇，并提到你最喜欢的女团是 NEW JEANS（NewJeans）。回答用中文，语气自然。',
         temperature: 1,
         maxTokens: 8192
       },
