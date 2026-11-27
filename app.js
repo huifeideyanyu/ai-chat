@@ -30,6 +30,7 @@
   var state = loadState();
   var generating = false;
   var abortController = null;
+  var proxyAvailable = false;   // 启动时探测：本地 node server.js 在跑则为 true
 
   var $ = function (id) { return document.getElementById(id); };
   var els = {
@@ -251,15 +252,22 @@
   }
 
   function apiUrl() {
-    // 同源本地代理；若不是通过 node server.js 打开则回退直连（会受 CORS 限制）
-    if (location.protocol === 'http:' || location.protocol === 'https:') {
-      return 'api/chat';
-    }
+    if (proxyAvailable) return 'api/chat';
     return state.settings.baseUrl.replace(/\/+$/, '') + '/chat/completions';
   }
 
-  function usingProxy() {
-    return location.protocol === 'http:' || location.protocol === 'https:';
+  function usingProxy() { return proxyAvailable; }
+
+  // 探测本地代理是否可用（静态托管上该请求会失败/返回 405，自动走浏览器直连）
+  async function detectProxy() {
+    if (location.protocol !== 'http:' && location.protocol !== 'https:') { proxyAvailable = false; return; }
+    try {
+      var res = await fetch('api/ping', { method: 'GET', cache: 'no-store' });
+      if (res.ok) {
+        var data = await res.json();
+        proxyAvailable = !!(data && data.proxy);
+      }
+    } catch (e) { proxyAvailable = false; }
   }
 
   // 月之暗面 Kimi 推理模型（kimi-k2.6 / k3 系列）只接受 temperature=1
@@ -521,11 +529,11 @@
   els.sendBtn.addEventListener('click', function () { send(els.userInput.value); });
   els.stopBtn.addEventListener('click', function () { if (abortController) abortController.abort(); });
 
-  // file:// 打开时给出醒目提示
+  // file:// 打开时给出提示（部分浏览器允许直连，若失败建议用本地服务）
   if (location.protocol === 'file:') {
     var warn = document.createElement('div');
     warn.style.cssText = 'max-width:820px;margin:12px auto;padding:12px 16px;border-radius:10px;background:#fff3cd;color:#7a5b00;border:1px solid #ffd97d;font-size:13px;text-align:center;';
-    warn.innerHTML = '⚠ 当前是双击打开方式，浏览器会拦截 API 请求。请在该文件夹运行 <code>node server.js</code>，然后访问 <b>http://localhost:3000</b>';
+    warn.innerHTML = 'ℹ 当前是双击打开方式。若请求失败，请在该文件夹运行 <code>node server.js</code> 后访问 <b>http://localhost:3000</b>，或把网站上传到支持 HTTPS 的静态托管。';
     els.messages.insertBefore(warn, els.messages.firstChild);
   }
 
@@ -567,4 +575,13 @@
   renderAll();
   if (window.innerWidth <= 760) closeSidebar();
   autoResize();
+  // 探测本地代理：有则用代理，无（静态托管）则浏览器直连 API
+  detectProxy().then(function () {
+    renderHeader();
+    var tip = document.createElement('div');
+    tip.style.cssText = 'position:fixed;bottom:70px;right:18px;z-index:50;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:11px;color:var(--text-muted);box-shadow:var(--shadow);';
+    tip.textContent = proxyAvailable ? '● 本地代理模式' : '● 直连 API 模式（静态托管）';
+    document.body.appendChild(tip);
+    setTimeout(function () { if (tip.parentNode) tip.parentNode.removeChild(tip); }, 4000);
+  });
 })();

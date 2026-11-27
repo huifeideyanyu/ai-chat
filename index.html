@@ -25,7 +25,7 @@
 
     <div class="sidebar-bottom">
       <button class="side-link" id="settingsBtn"><span>⚙</span> 设置 / API</button>
-      <div class="side-note">所有数据仅保存在本机浏览器</div>
+      <div class="side-note">所有数据仅保存在本机浏览器 · <span class="version-tag">v1.2</span></div>
     </div>
   </aside>
 
@@ -78,7 +78,7 @@
         <strong>API Key 粘贴在下面第二个输入框「API Key」里。</strong><br>
         支持任何 OpenAI 兼容接口（OpenAI / DeepSeek / Moonshot / 通义 / 本地 Ollama 等）。
         信息只保存在你自己的浏览器 localStorage 中，请求经本机代理转发，不会上传到别处。<br>
-        <strong style="color:#d9534f">⚠ 必须通过 <code>node server.js</code> 启动、访问 http://localhost:3000 使用；直接双击 HTML 会因浏览器跨域限制而失败。</strong>
+        <strong style="color:#2e9e63">✓ 支持两种模式：① 本地运行 <code>node server.js</code> 走代理；② 上传到静态网站（如 GitHub Pages 等）自动改为浏览器直连。页面会自动识别，无需手动设置。</strong>
       </div>
 
       <label class="field">

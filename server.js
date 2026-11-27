@@ -27,6 +27,11 @@ function sendJson(res, code, obj) {
 }
 
 const server = http.createServer(function (req, res) {
+  // ---------- 代理探测端点（供前端判断走代理还是直连） ----------
+  if (req.method === 'GET' && (req.url === '/api/ping' || req.url.startsWith('/api/ping?'))) {
+    return sendJson(res, 200, { proxy: true });
+  }
+
   // ---------- AI 接口代理 ----------
   if (req.method === 'POST' && (req.url === '/api/chat' || req.url.startsWith('/api/chat?'))) {
     let body = '';

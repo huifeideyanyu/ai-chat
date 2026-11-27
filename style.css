@@ -105,6 +105,7 @@ body {
 .side-link:hover { background: var(--hover); }
 .side-link span { font-size: 16px; color: var(--accent); }
 .side-note { font-size: 11px; color: var(--text-muted); padding: 4px 10px 2px; }
+.version-tag { display: inline-block; background: var(--accent); color: var(--accent-text); border-radius: 5px; padding: 0 6px; font-weight: 700; font-size: 10.5px; }
 
 .sidebar-mask { display: none; }
 
