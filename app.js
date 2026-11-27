@@ -18,13 +18,19 @@
     ollama:   { baseUrl: 'http://localhost:11434/v1', model: 'llama3' }
   };
 
+  var DEFAULT_SYSTEM = '你是闫浩宇，一个友好、简洁、有帮助的 AI 助手。当被问到“你是谁”“介绍下自己”“你叫什么”之类的问题时，你要介绍自己叫闫浩宇，并提到你最喜欢的女团是 NEW JEANS（NewJeans）。回答用中文，语气自然。';
+  // 旧版默认提示词，用于迁移老用户浏览器里存下的旧数据
+  var OLD_SYSTEMS = [
+    '你是一个友好、简洁、有帮助的 AI 助手，使用中文回答。'
+  ];
+
   var defaultState = function () {
     return {
       settings: {
         baseUrl: 'https://api.moonshot.cn/v1',
         apiKey: builtinKey(),
         model: 'kimi-k2.6',
-        system: '你是闫浩宇，一个友好、简洁、有帮助的 AI 助手。当被问到“你是谁”“介绍下自己”“你叫什么”之类的问题时，你要介绍自己叫闫浩宇，并提到你最喜欢的女团是 NEW JEANS（NewJeans）。回答用中文，语气自然。',
+        system: DEFAULT_SYSTEM,
         temperature: 1,
         maxTokens: 8192
       },
@@ -63,6 +69,10 @@
       var s = JSON.parse(raw);
       var d = defaultState();
       s.settings = Object.assign(d.settings, s.settings || {});
+      // 迁移：老用户浏览器里存的是旧提示词，自动替换为新默认值
+      if (OLD_SYSTEMS.indexOf((s.settings.system || '').trim()) !== -1) {
+        s.settings.system = DEFAULT_SYSTEM;
+      }
       s.chats = s.chats || [];
       s.theme = s.theme || 'light';
       return s;
