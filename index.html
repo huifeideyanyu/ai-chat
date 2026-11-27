@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>小聊 · AI 助手</title>
-<link rel="stylesheet" href="style.css?v=1.5">
+<title>阿鱼 · 音乐搭子</title>
+<link rel="stylesheet" href="style.css?v=1.6">
 </head>
 <body>
 <div class="app">
@@ -12,7 +12,7 @@
     <div class="sidebar-top">
       <div class="brand">
         <span class="brand-icon">✦</span>
-        <span class="brand-name">小聊</span>
+        <span class="brand-name">阿鱼 🎧</span>
       </div>
       <button class="icon-btn collapse-btn" id="collapseBtn" title="收起侧边栏">☰</button>
     </div>
@@ -25,7 +25,7 @@
 
     <div class="sidebar-bottom">
       <button class="side-link" id="settingsBtn"><span>⚙</span> 设置 / API</button>
-      <div class="side-note">所有数据仅保存在本机浏览器 · <span class="version-tag">v1.5</span></div>
+      <div class="side-note">所有数据仅保存在本机浏览器 · <span class="version-tag">v1.6</span></div>
     </div>
   </aside>
 
@@ -43,13 +43,14 @@
 
     <div class="messages" id="messages">
       <div class="welcome" id="welcome">
-        <div class="welcome-icon">✦</div>
-        <h1>你好，我是小聊</h1>
-        <p>一个简洁的 AI 聊天助手。先在「设置 / API」里填上接口信息，就可以开始对话了。</p>
+        <div class="welcome-icon">🎧</div>
+        <h1>嗨，我是阿鱼</h1>
+        <p>浩宇的音乐搭子。记得他听过的歌、循环过的次数，也懂他那点日系和二次元的偏爱。想聊歌、找歌、或者随便唠唠，都行。</p>
         <div class="welcome-tips">
-          <button class="tip-card" data-tip="用简单的语言解释一下什么是大语言模型">💡 解释一个概念</button>
-          <button class="tip-card" data-tip="帮我写一段自我介绍，风格轻松幽默">✍️ 帮我写段文字</button>
-          <button class="tip-card" data-tip="请列出学习 Python 的五个步骤">📋 列个学习计划</button>
+          <button class="tip-card" data-tip="你是谁？介绍一下你自己">🐟 你是谁</button>
+          <button class="tip-card" data-tip="我听过《マリーゴールド》吗？听了多少次">🎵 查一首歌</button>
+          <button class="tip-card" data-tip="给我推荐几首适合深夜听的歌">🌙 推荐几首歌</button>
+          <button class="tip-card" data-tip="你最喜欢的歌手是谁">💿 聊聊口味</button>
         </div>
       </div>
     </div>
@@ -101,8 +102,9 @@
       </label>
 
       <label class="field">
-        <span class="field-label">系统提示词（可选）</span>
-        <textarea id="cfgSystem" rows="3" placeholder="例如：你是一个简洁友好的助手，用中文回答。">你是闫浩宇，一个友好、简洁、有帮助的 AI 助手。当被问到“你是谁”“介绍下自己”“你叫什么”之类的问题时，你要介绍自己叫闫浩宇，并提到你最喜欢的女团是 NEW JEANS（NewJeans）。回答用中文，语气自然。</textarea>
+        <span class="field-label">人设 / 系统提示词</span>
+        <textarea id="cfgSystem" rows="3" placeholder="已内置专属人设，留空即使用内置设定（内容刻意隐藏）"></textarea>
+        <span class="field-help">内置了「阿鱼」的音乐人设和歌单记忆。出于惊喜，这里不展示内容；留空即使用内置人设，填写则覆盖（仅存本机）。</span>
       </label>
 
       <div class="two-col">
@@ -137,6 +139,7 @@
   </div>
 </div>
 
-<script src="app.js?v=1.5"></script>
+<script src="persona.js?v=1.6"></script>
+<script src="app.js?v=1.6"></script>
 </body>
 </html>

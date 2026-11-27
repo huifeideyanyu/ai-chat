@@ -1,4 +1,4 @@
-/* 小聊 · 本地 AI 聊天助手 */
+/* 阿鱼 · 音乐搭子 AI */
 (function () {
   'use strict';
 
@@ -18,10 +18,12 @@
     ollama:   { baseUrl: 'http://localhost:11434/v1', model: 'llama3' }
   };
 
-  var DEFAULT_SYSTEM = '你是闫浩宇，一个友好、简洁、有帮助的 AI 助手。当被问到“你是谁”“介绍下自己”“你叫什么”之类的问题时，你要介绍自己叫闫浩宇，并提到你最喜欢的女团是 NEW JEANS（NewJeans）。回答用中文，语气自然。';
+  // 内置音乐 AI「阿鱼」人设（来自 persona.js，隐藏不在界面展示）
+  var DEFAULT_SYSTEM = (window.CHAT_PERSONA || '你是阿鱼，一个懂音乐的 AI 搭子，用中文回答。');
   // 旧版默认提示词，用于迁移老用户浏览器里存下的旧数据
   var OLD_SYSTEMS = [
-    '你是一个友好、简洁、有帮助的 AI 助手，使用中文回答。'
+    '你是一个友好、简洁、有帮助的 AI 助手，使用中文回答。',
+    '你是闫浩宇，一个友好、简洁、有帮助的 AI 助手。当被问到“你是谁”“介绍下自己”“你叫什么”之类的问题时，你要介绍自己叫闫浩宇，并提到你最喜欢的女团是 NEW JEANS（NewJeans）。回答用中文，语气自然。'
   ];
 
   var defaultState = function () {
@@ -142,7 +144,7 @@
     var s = state.settings;
     var hasApi = !!(s.apiKey && s.baseUrl && s.model);
     els.modelBadge.textContent = hasApi ? s.model : '未配置 API · 点击左下角设置';
-    els.userInput.placeholder = hasApi ? '输入消息… （Enter 发送，Shift + Enter 换行）' : '请先在「设置 / API」中填写 API Key';
+    els.userInput.placeholder = hasApi ? '和阿鱼聊聊歌… （Enter 发送，Shift + Enter 换行）' : '请先在「设置 / API」中填写 API Key';
   }
 
   function renderChatList() {
@@ -180,7 +182,7 @@
     wrap.className = 'message ' + role;
     var avatar = document.createElement('div');
     avatar.className = 'avatar';
-    avatar.textContent = role === 'user' ? '我' : '✦';
+    avatar.textContent = role === 'user' ? '我' : '🎧';
     var right = document.createElement('div');
     var bubble = document.createElement('div');
     bubble.className = 'bubble' + (content ? '' : ' empty');
@@ -427,7 +429,7 @@
     els.cfgBaseUrl.value = s.baseUrl || '';
     els.cfgApiKey.value = '';   // 绝不回填真实 Key
     els.cfgModel.value = s.model || '';
-    els.cfgSystem.value = s.system || '';
+    els.cfgSystem.value = '';   // 绝不回填真实系统提示词（保持惊喜）
     els.cfgTemperature.value = safeTemperature(s.model, s.temperature);
     els.cfgMaxTokens.value = s.maxTokens;
     els.cfgApiKey.type = 'password';
@@ -449,7 +451,7 @@
       baseUrl: els.cfgBaseUrl.value.trim(),
       apiKey: inputKey || state.settings.apiKey,   // 留空则保留内置 Key
       model: els.cfgModel.value.trim(),
-      system: els.cfgSystem.value,
+      system: els.cfgSystem.value.trim() || state.settings.system,   // 留空则保留内置人设
       temperature: els.cfgTemperature.value,
       maxTokens: els.cfgMaxTokens.value
     };
