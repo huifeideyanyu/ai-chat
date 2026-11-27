@@ -4,6 +4,13 @@
 
   var STORE_KEY = 'xiaoliao_chat_v1';
 
+  // 内置 API Key 以编码形式存放，避免明文出现在页面源码中
+  var BUILTIN_KEY_ENC = 'c2stbXMtOVljQkhWMlFJYWtJQmlwcHlDbjVxcE1JbXNjVm1pTWs5anVYbDlmT0lnN0VqUkRRNXMwVU04TVQ=';
+  function builtinKey() {
+    try { return decodeURIComponent(escape(atob(BUILTIN_KEY_ENC))); }
+    catch (e) { return atob(BUILTIN_KEY_ENC); }
+  }
+
   var PRESETS = {
     openai:   { baseUrl: 'https://api.openai.com/v1', model: 'gpt-4o-mini' },
     deepseek: { baseUrl: 'https://api.deepseek.com/v1', model: 'deepseek-chat' },
@@ -15,7 +22,7 @@
     return {
       settings: {
         baseUrl: 'https://api.moonshot.cn/v1',
-        apiKey: 'sk-ms-9YcBHV2QIakIBippyCn5qpMImscVmiMk9juXl9fOIg7EjRDQ5s0UM8MT',
+        apiKey: builtinKey(),
         model: 'kimi-k2.6',
         system: '你是一个友好、简洁、有帮助的 AI 助手，使用中文回答。',
         temperature: 1,
@@ -46,7 +53,7 @@
     cancelSettingsBtn: $('cancelSettingsBtn'), saveSettingsBtn: $('saveSettingsBtn'),
     cfgBaseUrl: $('cfgBaseUrl'), cfgApiKey: $('cfgApiKey'), cfgModel: $('cfgModel'),
     cfgSystem: $('cfgSystem'), cfgTemperature: $('cfgTemperature'), cfgMaxTokens: $('cfgMaxTokens'),
-    toggleKeyBtn: $('toggleKeyBtn'), testBtn: $('testBtn'), testResult: $('testResult')
+    testBtn: $('testBtn'), testResult: $('testResult')
   };
 
   function loadState() {
@@ -408,13 +415,12 @@
   function openSettings() {
     var s = state.settings;
     els.cfgBaseUrl.value = s.baseUrl || '';
-    els.cfgApiKey.value = s.apiKey || '';
+    els.cfgApiKey.value = '';   // 绝不回填真实 Key
     els.cfgModel.value = s.model || '';
     els.cfgSystem.value = s.system || '';
     els.cfgTemperature.value = safeTemperature(s.model, s.temperature);
     els.cfgMaxTokens.value = s.maxTokens;
     els.cfgApiKey.type = 'password';
-    els.toggleKeyBtn.textContent = '显示';
     setTestResult('', '');
     els.settingsModal.style.display = 'flex';
     setTimeout(function () { els.cfgApiKey.focus(); }, 50);
@@ -428,9 +434,10 @@
   }
 
   function readForm() {
+    var inputKey = els.cfgApiKey.value.trim();
     return {
       baseUrl: els.cfgBaseUrl.value.trim(),
-      apiKey: els.cfgApiKey.value.trim(),
+      apiKey: inputKey || state.settings.apiKey,   // 留空则保留内置 Key
       model: els.cfgModel.value.trim(),
       system: els.cfgSystem.value,
       temperature: els.cfgTemperature.value,
@@ -465,12 +472,6 @@
     }
     applyForm(form);
     closeSettings();
-  });
-
-  els.toggleKeyBtn.addEventListener('click', function () {
-    var show = els.cfgApiKey.type === 'password';
-    els.cfgApiKey.type = show ? 'text' : 'password';
-    els.toggleKeyBtn.textContent = show ? '隐藏' : '显示';
   });
 
   document.querySelectorAll('.preset-btn').forEach(function (btn) {
