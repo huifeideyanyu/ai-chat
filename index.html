@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>阿鱼 · 音乐搭子</title>
-<link rel="stylesheet" href="style.css?v=1.6">
+<title>腌鱼 · 音乐搭子</title>
+<link rel="stylesheet" href="style.css?v=1.7">
 </head>
 <body>
 <div class="app">
@@ -12,7 +12,7 @@
     <div class="sidebar-top">
       <div class="brand">
         <span class="brand-icon">✦</span>
-        <span class="brand-name">阿鱼 🎧</span>
+        <span class="brand-name">腌鱼 🎧</span>
       </div>
       <button class="icon-btn collapse-btn" id="collapseBtn" title="收起侧边栏">☰</button>
     </div>
@@ -25,7 +25,7 @@
 
     <div class="sidebar-bottom">
       <button class="side-link" id="settingsBtn"><span>⚙</span> 设置 / API</button>
-      <div class="side-note">所有数据仅保存在本机浏览器 · <span class="version-tag">v1.6</span></div>
+      <div class="side-note">所有数据仅保存在本机浏览器 · <span class="version-tag">v1.7</span></div>
     </div>
   </aside>
 
@@ -43,9 +43,20 @@
 
     <div class="messages" id="messages">
       <div class="welcome" id="welcome">
-        <div class="welcome-icon">🎧</div>
-        <h1>嗨，我是阿鱼</h1>
-        <p>浩宇的音乐搭子。记得他听过的歌、循环过的次数，也懂他那点日系和二次元的偏爱。想聊歌、找歌、或者随便唠唠，都行。</p>
+        <div class="vinyl-deco"><div class="vinyl-disc"><div class="vinyl-label"></div></div></div>
+        <div class="welcome-icon"></div>
+        <div class="welcome-kicker">✦ Your Music Bestie ✦</div>
+        <h1>嗨，我是 <em>腌鱼</em></h1>
+        <div class="welcome-sub">浩宇的私人音乐搭子 🐟</div>
+        <div class="stats-row">
+          <div class="stat"><span class="stat-num">3384</span><span class="stat-label">首收藏</span></div>
+          <span class="stat-sep"></span>
+          <div class="stat"><span class="stat-num">57063</span><span class="stat-label">次播放</span></div>
+          <span class="stat-sep"></span>
+          <div class="stat"><span class="stat-num">1428</span><span class="stat-label">位歌手</span></div>
+        </div>
+        <p class="welcome-quote">"听过你循环三千多次的歌，也记得你偷偷 mark 却没放的 NewJeans。"</p>
+        <p class="welcome-desc">想聊歌、找歌、或者随便唠唠，我都在。</p>
         <div class="welcome-tips">
           <button class="tip-card" data-tip="你是谁？介绍一下你自己">🐟 你是谁</button>
           <button class="tip-card" data-tip="我听过《マリーゴールド》吗？听了多少次">🎵 查一首歌</button>
@@ -104,7 +115,7 @@
       <label class="field">
         <span class="field-label">人设 / 系统提示词</span>
         <textarea id="cfgSystem" rows="3" placeholder="已内置专属人设，留空即使用内置设定（内容刻意隐藏）"></textarea>
-        <span class="field-help">内置了「阿鱼」的音乐人设和歌单记忆。出于惊喜，这里不展示内容；留空即使用内置人设，填写则覆盖（仅存本机）。</span>
+        <span class="field-help">内置了「腌鱼」的音乐人设和歌单记忆。出于惊喜，这里不展示内容；留空即使用内置人设，填写则覆盖（仅存本机）。</span>
       </label>
 
       <div class="two-col">
@@ -139,7 +150,7 @@
   </div>
 </div>
 
-<script src="persona.js?v=1.6"></script>
-<script src="app.js?v=1.6"></script>
+<script src="persona.js?v=1.7"></script>
+<script src="app.js?v=1.7"></script>
 </body>
 </html>

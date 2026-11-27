@@ -1,4 +1,4 @@
-/* 阿鱼 · 音乐搭子 AI */
+/* 腌鱼 · 音乐搭子 AI */
 (function () {
   'use strict';
 
@@ -18,8 +18,8 @@
     ollama:   { baseUrl: 'http://localhost:11434/v1', model: 'llama3' }
   };
 
-  // 内置音乐 AI「阿鱼」人设（来自 persona.js，隐藏不在界面展示）
-  var DEFAULT_SYSTEM = (window.CHAT_PERSONA || '你是阿鱼，一个懂音乐的 AI 搭子，用中文回答。');
+  // 内置音乐 AI「腌鱼」人设（来自 persona.js，隐藏不在界面展示）
+  var DEFAULT_SYSTEM = (window.CHAT_PERSONA || '你是腌鱼，一个懂音乐的 AI 搭子，用中文回答。');
   // 旧版默认提示词，用于迁移老用户浏览器里存下的旧数据
   var OLD_SYSTEMS = [
     '你是一个友好、简洁、有帮助的 AI 助手，使用中文回答。',
@@ -38,7 +38,8 @@
       },
       chats: [],
       activeId: null,
-      theme: 'light'
+      theme: 'light',
+      uiVersion: 1.7
     };
   };
 
@@ -71,11 +72,17 @@
       var s = JSON.parse(raw);
       var d = defaultState();
       s.settings = Object.assign(d.settings, s.settings || {});
-      // 迁移：老用户浏览器里存的是旧提示词，自动替换为新默认值
-      if (OLD_SYSTEMS.indexOf((s.settings.system || '').trim()) !== -1) {
+      // 迁移：老用户浏览器里存的是旧提示词（含 v1.6 的「阿鱼」人设），自动替换为新默认值
+      var storedSys = (s.settings.system || '').trim();
+      if (OLD_SYSTEMS.indexOf(storedSys) !== -1 || storedSys.indexOf('你是「阿鱼」') === 0) {
         s.settings.system = DEFAULT_SYSTEM;
       }
       s.chats = s.chats || [];
+      // v1.7 起默认浅色 Supernatural 风：老用户首次升级时切到 light，之后尊重手动选择
+      if (s.uiVersion !== 1.7) {
+        s.theme = 'light';
+        s.uiVersion = 1.7;
+      }
       s.theme = s.theme || 'light';
       return s;
     } catch (e) {
@@ -144,7 +151,7 @@
     var s = state.settings;
     var hasApi = !!(s.apiKey && s.baseUrl && s.model);
     els.modelBadge.textContent = hasApi ? s.model : '未配置 API · 点击左下角设置';
-    els.userInput.placeholder = hasApi ? '和阿鱼聊聊歌… （Enter 发送，Shift + Enter 换行）' : '请先在「设置 / API」中填写 API Key';
+    els.userInput.placeholder = hasApi ? '和腌鱼聊聊歌… （Enter 发送，Shift + Enter 换行）' : '请先在「设置 / API」中填写 API Key';
   }
 
   function renderChatList() {
@@ -181,8 +188,12 @@
     var wrap = document.createElement('div');
     wrap.className = 'message ' + role;
     var avatar = document.createElement('div');
-    avatar.className = 'avatar';
-    avatar.textContent = role === 'user' ? '我' : '🎧';
+    avatar.className = 'avatar' + (role === 'assistant' ? ' bot-avatar' : '');
+    if (role === 'user') {
+      avatar.textContent = '我';
+    } else {
+      avatar.innerHTML = '<img src="assets/hero-bot-avatar.png" alt="腌鱼">';
+    }
     var right = document.createElement('div');
     var bubble = document.createElement('div');
     bubble.className = 'bubble' + (content ? '' : ' empty');
