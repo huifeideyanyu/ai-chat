@@ -222,9 +222,11 @@
     if (!chat || !chat.messages.length) {
       els.messages.appendChild(els.welcome);
       els.welcome.style.display = '';
+      els.messages.classList.add('showing-welcome');
       return;
     }
     els.welcome.style.display = 'none';
+    els.messages.classList.remove('showing-welcome');
     chat.messages.forEach(function (m) {
       els.messages.appendChild(messageEl(m.role, m.content, m.reasoning));
     });
