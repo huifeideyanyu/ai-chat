@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>腌鱼 · 音乐搭子</title>
-<link rel="stylesheet" href="style.css?v=1.7">
+<link rel="stylesheet" href="style.css?v=1.8">
 </head>
 <body>
 <div class="app">
@@ -25,7 +25,7 @@
 
     <div class="sidebar-bottom">
       <button class="side-link" id="settingsBtn"><span>⚙</span> 设置 / API</button>
-      <div class="side-note">所有数据仅保存在本机浏览器 · <span class="version-tag">v1.7</span></div>
+      <div class="side-note">所有数据仅保存在本机浏览器 · <span class="version-tag">v1.8</span></div>
     </div>
   </aside>
 
@@ -150,7 +150,31 @@
   </div>
 </div>
 
-<script src="persona.js?v=1.7"></script>
-<script src="app.js?v=1.7"></script>
+<!-- 悬浮音乐播放器 -->
+<div class="music-player" id="musicPlayer">
+  <button class="mp-collapse" id="mpCollapse" title="收起播放器">▾</button>
+  <div class="mp-head">
+    <div class="mp-cover"><img id="mpCover" src="assets/covers/01-newjeans-flower.jpg" alt=""></div>
+    <div class="mp-meta">
+      <div class="mp-song" id="mpSong">Supernatural</div>
+      <div class="mp-artist" id="mpArtist">NewJeans</div>
+    </div>
+  </div>
+  <div class="mp-progress-wrap">
+    <div class="mp-progress" id="mpProgress"><div class="mp-progress-fill" id="mpProgressFill"></div></div>
+    <div class="mp-time"><span id="mpCur">0:00</span><span id="mpDur">0:00</span></div>
+  </div>
+  <div class="mp-controls">
+    <button class="mp-btn" id="mpPrev" title="上一首">⏮</button>
+    <button class="mp-btn mp-play" id="mpPlay" title="播放/暂停">▶</button>
+    <button class="mp-btn" id="mpNext" title="下一首">⏭</button>
+  </div>
+  <audio id="mpAudio" preload="metadata"></audio>
+</div>
+<button class="mp-fab" id="mpFab" title="展开播放器">🎵</button>
+
+<script src="persona.js?v=1.8"></script>
+<script src="app.js?v=1.8"></script>
+<script src="player.js?v=1.8"></script>
 </body>
 </html>
