@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>腌鱼 · 音乐搭子</title>
-<link rel="stylesheet" href="style.css?v=1.8">
+<link rel="stylesheet" href="style.css?v=2.0">
 </head>
 <body>
 <div class="app">
@@ -25,7 +25,7 @@
 
     <div class="sidebar-bottom">
       <button class="side-link" id="settingsBtn"><span>⚙</span> 设置 / API</button>
-      <div class="side-note">所有数据仅保存在本机浏览器 · <span class="version-tag">v1.8</span></div>
+      <div class="side-note">所有数据仅保存在本机浏览器 · <span class="version-tag">v2.0</span></div>
     </div>
   </aside>
 
@@ -44,6 +44,13 @@
     <div class="messages" id="messages">
       <div class="welcome" id="welcome">
         <div class="vinyl-deco"><div class="vinyl-disc"><div class="vinyl-label"></div></div></div>
+        <!-- 像素装饰点缀 -->
+        <img class="pixel-deco pd-picklejar" src="assets/pixel-decor/picklejar.png" alt="">
+        <img class="pixel-deco pd-crystal" src="assets/pixel-decor/crystal.png" alt="">
+        <img class="pixel-deco pd-mushroom" src="assets/pixel-decor/mushroom.png" alt="">
+        <img class="pixel-deco pd-spring" src="assets/pixel-decor/spring.png" alt="">
+        <img class="pixel-deco pd-barrel" src="assets/pixel-decor/barrel.png" alt="">
+        <img class="pixel-deco pd-tree" src="assets/pixel-decor/tree.png" alt="">
         <div class="welcome-icon"></div>
         <div class="welcome-kicker">✦ Your Music Bestie ✦</div>
         <h1>嗨，我是 <em>腌鱼</em></h1>
@@ -57,6 +64,17 @@
         </div>
         <p class="welcome-quote">"听过你循环三千多次的歌，也记得你偷偷 mark 却没放的 NewJeans。"</p>
         <p class="welcome-desc">想聊歌、找歌、或者随便唠唠，我都在。</p>
+        <div class="welcome-strip" aria-hidden="true">
+          <img src="assets/covers/01-newjeans-flower.jpg" alt="">
+          <img src="assets/covers/05-shiina-ringoku.jpg" alt="">
+          <img src="assets/covers/09-wangfei-fable.jpg" alt="">
+          <img src="assets/covers/14-pinkfloyd.jpg" alt="">
+          <img src="assets/covers/06-aimyon-sea.jpg" alt="">
+          <img src="assets/covers/22-babymonster-choom.jpg" alt="">
+          <img src="assets/covers/17-hands-pot.jpg" alt="">
+          <img src="assets/covers/12-xjapan-artoflife.jpg" alt="">
+          <img src="assets/covers/24-karenmok-12floor.jpg" alt="">
+        </div>
         <div class="welcome-tips">
           <button class="tip-card" data-tip="你是谁？介绍一下你自己">🐟 你是谁</button>
           <button class="tip-card" data-tip="我听过《マリーゴールド》吗？听了多少次">🎵 查一首歌</button>
@@ -150,11 +168,14 @@
   </div>
 </div>
 
-<!-- 悬浮音乐播放器 -->
+<!-- 悬浮音乐播放器（可拖动 / 可收起） -->
 <div class="music-player" id="musicPlayer">
-  <button class="mp-collapse" id="mpCollapse" title="收起播放器">▾</button>
+  <div class="mp-dragbar" id="mpDragbar">
+    <span class="mp-grip">⠿</span>
+    <span class="mp-drag-label">正在播放</span>
+    <button class="mp-collapse" id="mpCollapse" title="收起播放器">▾</button>
+  </div>
   <div class="mp-head">
-    <div class="mp-cover"><img id="mpCover" src="assets/covers/01-newjeans-flower.jpg" alt=""></div>
     <div class="mp-meta">
       <div class="mp-song" id="mpSong">Supernatural</div>
       <div class="mp-artist" id="mpArtist">NewJeans</div>
@@ -173,8 +194,8 @@
 </div>
 <button class="mp-fab" id="mpFab" title="展开播放器">🎵</button>
 
-<script src="persona.js?v=1.8"></script>
-<script src="app.js?v=1.8"></script>
-<script src="player.js?v=1.8"></script>
+<script src="persona.js?v=2.0"></script>
+<script src="app.js?v=2.0"></script>
+<script src="player.js?v=2.0"></script>
 </body>
 </html>
